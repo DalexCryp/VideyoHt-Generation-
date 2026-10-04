@@ -72,7 +72,15 @@ export function Topbar({
 
   return (
     <div className="ohf-topbar">
-      <h1 className="ohf-sr">OpenHiggsfield AI — Open source AI studio</h1>
+      <h1 className="ohf-brand ohf-enter-1" aria-label="VideyoHT">
+        <svg className="ohf-brand-mark" viewBox="0 0 32 32" aria-hidden>
+          <rect width="32" height="32" rx="8" fill="var(--accent)" />
+          <path d="M12.5 10.2v11.6a1 1 0 0 0 1.5.86l9.3-5.8a1 1 0 0 0 0-1.72l-9.3-5.8a1 1 0 0 0-1.5.86z" fill="var(--accent-ink)" />
+        </svg>
+        <span className="ohf-brand-word" aria-hidden>
+          Videyo<span className="ohf-brand-accent">HT</span>
+        </span>
+      </h1>
 
       <div className="ohf-bar ohf-enter-1">
         <div

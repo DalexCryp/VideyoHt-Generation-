@@ -11,3 +11,6 @@ minimumReleaseAgeExclude:
   - rollup
   - next
   - "@next/*"
+
+overrides:
+  undici: ^6.28.1

@@ -374,7 +374,45 @@
   box-shadow: var(--shadow-2), var(--glint);
 }
 
-/* The studio's page heading; the bar carries scope, not brand. */
+/* The studio's logo, pinned top-left while the bars stay centered. */
+.ohf-brand {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  height: 46px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+.ohf-brand-mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.ohf-brand-word {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--tx);
+}
+.ohf-brand-accent {
+  color: var(--accent);
+}
+/* Narrow screens: the centered bars need the room, so the mark stands alone. */
+@media (max-width: 900px) {
+  .ohf-brand-word {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .ohf-brand {
+    display: none;
+  }
+}
+
 .ohf-sr {
   position: absolute;
   width: 1px;

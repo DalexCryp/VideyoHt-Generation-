@@ -15,7 +15,7 @@ function resolveOrigin(): string {
 
 export const SITE_URL = resolveOrigin();
 
-export const SITE_NAME = "OpenHiggsfield AI";
+export const SITE_NAME = "VideyoHT";
 export const SITE_DESCRIPTOR = "Open source AI studio";
 export const SITE_TITLE = `${SITE_NAME} — ${SITE_DESCRIPTOR}`;
 
