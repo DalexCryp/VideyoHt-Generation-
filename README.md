@@ -1,28 +1,30 @@
-# OpenHiggsfield AI — Open-Source Alternative to Higgsfield AI
+# VideyoHT — AI image and video studio
 
-> **The free, open-source alternative to Higgsfield AI.** Generate images and
-> videos with 38 models from one prompt bar — no closed ecosystem, no studio
-> subscription.
+> Generate images and videos with 38 models, Seedance 2.5 included, from one
+> prompt bar, using your own Higgsfield platform key. Runs locally on your PC.
 
-## 🌐 Try it Online — No Install Required
+VideyoHT is a rebranded, security-hardened fork of
+[OpenHiggsfield AI](https://github.com/wide-trace/open-higgsfield) by wide-trace.
 
-**Hosted version:** [openhiggsfield.ai](https://openhiggsfield.ai)
+- **Self-hosted**: runs on your own machine, reachable only from it
+- **Your key**: generates with your own Higgsfield platform key (`id:secret`)
+- **38 models**: 8 image and 30 video models, one catalog, one composer
 
-Image and Video in one studio, in the browser — no Node.js, no setup. Add your
-platform key (`id:secret`) to start generating. The studio itself is free.
-
----
-
-**Why OpenHiggsfield AI instead of Higgsfield AI?**
-
-- **Free & open-source** — no studio subscription, no vendor lock-in
-- **Self-hosted** — clone it, run it, change it
-- **Your key** — generate with your own platform key
-- **38 models** — 8 image, 30 video, one catalog, one composer
+Next.js 16 App Router · React 19 · plain CSS · Zustand · pnpm
 
 ---
 
-Next.js 16 App Router on Vercel · React 19 · plain CSS · Zustand · pnpm
+## Changes from upstream
+
+- **Branding.** VideyoHT logo pinned top-left (lime `#d1fe17` mark with a play
+  glyph, "Videyo" + lime "HT" wordmark), matching favicon, and `SITE_NAME` set to
+  `VideyoHT` in `src/site.ts`.
+- **Dependencies.** `next` bumped to `^16.3.8`, which fixes a critical RCE
+  advisory in `next/og` and the `sharp`/libheif advisories. `undici` is pinned to
+  `^6.28.1` via `overrides` in `pnpm-workspace.yaml` to clear the `@vercel/blob`
+  advisories. `pnpm audit` reports no known vulnerabilities.
+- **Local only.** `pnpm dev` binds to `127.0.0.1`, so other devices on the
+  network, phones included, can't reach the studio.
 
 ---
 
@@ -105,26 +107,45 @@ Each generate is one object: `{ model, prompt, media, settings }`.
 
 ```bash
 pnpm install
-pnpm dev            # http://localhost:3000
+cp .env.example .env.local   # then set HF_API_BASE_URL (see below)
+pnpm dev                     # http://localhost:3000
 ```
 
 Open the studio, press **Add key**, and paste your platform key as `id:secret`.
 
 ### Environment
 
+Put these in `.env.local`. Git ignores it, so never commit it.
+
 ```bash
-HF_API_BASE_URL=                      # generation API origin, server only
-OPEN_HIGGSFIELD_READ_WRITE_TOKEN=     # Vercel Blob read-write token
+HF_API_BASE_URL=https://api.higgsfield.ai  # required, generation API origin, server only
+OPEN_HIGGSFIELD_READ_WRITE_TOKEN=          # optional, Vercel Blob token for media uploads
 ```
+
+Without `HF_API_BASE_URL`, every generate fails with `Missing HF_API_BASE_URL`.
+Text-to-video and text-to-image work without the Blob token. Only
+start/end frames, references and other media inputs need it.
 
 ### Commands
 
 | Command | What it does |
 | --- | --- |
-| `pnpm dev` | Dev server on port 3000 |
+| `pnpm dev` | Dev server on `127.0.0.1:3000` (this machine only) |
 | `pnpm build` | Production build |
 | `pnpm start` | Serve the production build |
 | `pnpm brand` | Rebuild the icons and OG card in `public/` |
+
+### Security notes
+
+- **Your key** lives only in an `httpOnly` cookie on `localhost` and is
+  sent only to `HF_API_BASE_URL`. It's never written to disk or logged.
+- **Generation** runs through Next.js server actions, which reject cross-origin
+  requests, so other websites can't spend your credits.
+- **`/api/blob` has no auth**, as its own comment says. It's inert while
+  `OPEN_HIGGSFIELD_READ_WRITE_TOKEN` is unset. Add auth before setting the
+  token on any deployment that others can reach.
+- **Before deploying publicly** (e.g. Vercel), add login and rate limiting, and
+  run `pnpm audit` after every dependency change.
 
 ---
 
